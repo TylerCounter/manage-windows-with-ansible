@@ -450,7 +450,7 @@ cd project-6
 ansible-playbook configure-windows.yml --ask-vault-pass
 ```
 
-## Part 9 -  
+## Part 9 -  Using DSC module.
 
 - Copy the ```project-6```directory as a ```project-7``` directory under the home directory and cd into it.
 
