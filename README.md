@@ -144,18 +144,19 @@ ansible --version
 ```bash
 $ scp -i <PATH-TO-PEM-FILE> <PATH-TO-PEM-FILE> ec2-user@<CONTROLLER-NODE-IP>:/home/ec2-user
 ```
-
+```bash
 sudo chmod 400 tyler-team.pem
+```
 
+- Install ```pywinrm``` package.
 
-What is WinRM?
+  WinRM is a management protocol used by Windows to remotely communicate with another server. It is a SOAP-based protocol that communicates over HTTP/HTTPS, and is included in all recent Windows operating systems. Since Windows Server 2012, WinRM has been enabled by default, but in most cases extra configuration is required to use WinRM with Ansible.
 
-WinRM is a management protocol used by Windows to remotely communicate with another server. It is a SOAP-based protocol that communicates over HTTP/HTTPS, and is included in all recent Windows operating systems. Since Windows Server 2012, WinRM has been enabled by default, but in most cases extra configuration is required to use WinRM with Ansible.
+  Ansible uses the pywinrm package to communicate with Windows servers over WinRM. It is not installed by default with the Ansible package, but can be installed by running the following:
 
-Ansible uses the pywinrm package to communicate with Windows servers over WinRM. It is not installed by default with the Ansible package, but can be installed by running the following:
-
+```bash
 pip3 install "pywinrm>=0.3.0" --user
-
+```
 
 https://github.com/diyan/pywinrm
 
@@ -189,10 +190,10 @@ Node-1  ansible_host=<YOUR-WEB-SERVER-IP>  ansible_user=ec2-user  ansible_ssh_pr
 
 ```cfg
 [defaults]
-host_key_checking = False
+# host_key_checking = False
 inventory=inventory.txt
-interpreter_python=auto_silent
-deprecation_warnings=False
+# interpreter_python=auto_silent
+# deprecation_warnings=False
 ```
 
 - Run the command below for pinging the linux server.
@@ -344,7 +345,7 @@ vi configure-windows.yml
 
 ```yaml
 - name: windows server configuration
-  hosts: windows-servers
+  hosts: windows_servers
   tasks:  
     - name: Set timezone to 'Romance Standard Time' (GMT+01:00)
       win_timezone:
@@ -383,10 +384,10 @@ mkdir group_vars
 cd group_vars
 ```
 
-- Create an encypted file using "ansible-vault" command named ```windows-servers.yml``` under the group_vars directory.
+- Create an encypted file using "ansible-vault" command named ```windows_servers.yml``` under the group_vars directory.
 
 ```bash
-ansible-vault create windows-servers.yml
+ansible-vault create windows_servers.yml
 ```
 
 New Vault password: xxxx
@@ -397,7 +398,7 @@ ansible_user: Administrator
 ansible_password: 3j6zz;-C)AfzCyvLoW%L6)S&WawzPoYw
 ```
 
-- Modify the ```playbook.yml``` file with the following line.
+- Modify the ```configure-windows.yml``` file with the following line.
 
 ```yml
       win_timezone:
@@ -406,7 +407,7 @@ ansible_password: 3j6zz;-C)AfzCyvLoW%L6)S&WawzPoYw
       win_hostname:
         name: tyler-hostname
 ```
-- Comment "ansible_user" and "ansible_password" lines from inventory.yml file.
+- Comment out ```ansible_user``` and ```ansible_password``` lines from inventory.yml file.
 
 - Run the playbook.
 
@@ -459,10 +460,10 @@ cp -r project-6/ project-7/
 cd project-7
 ```
 
-
+- Modify the ```configure-windows.yml``` file with following:
 
 ```yml
-- name: win_chocolatey module demo
+- name: DSC module example
   hosts: windows_servers
   gather_facts: false
   tasks:
@@ -478,20 +479,23 @@ cd project-7
 ```
 
 
-- create a file named  ```open_vault.txt``` and type ```vault password```in it.
+- create a file named  ```open_vault.txt``` and type your ```vault password```in it.
 
 ```bash
 vi open_vault.txt
 ```
 
-- Add the following line into the ansible.cfg file.
+- Add the following line into the ```ansible.cfg``` file.
 
 ```cfg
 vault_password_file= open_vault.txt
 ```
 
+- Run the playbook.
 
-
+```bash
+ansible-playbook configure-windows.yml
+```
 ------------------------------
 
 
