@@ -427,7 +427,7 @@ cd project-6
 - Modify the ```configure-windows.yml``` file with following:
 
 ```yml
-- name: win_chocolatey module demo
+- name: win_chocolatey module example
   hosts: windows_servers
   gather_facts: false
   vars:
